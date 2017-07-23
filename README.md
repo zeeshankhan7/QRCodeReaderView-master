@@ -165,3 +165,4 @@ License
 "# QRCodeReaderView-master" 
 "# QRCodeReaderView-master" 
 "# QRCodeReaderView-master" 
+"# QRCodeReaderView-master" 
