@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2e9f92</color>
+    <color name="colorPrimaryDark">#1aa696</color>
+    <color name="colorAccent">#f47920</color>
+    <color name="QRCodeBlackColor">#000000</color>
+    <color name="QRCodeWhiteColor">#ffffff</color>
+    <!--<color name="colorPrimary">#125688</color>-->
+    <!--<color name="colorPrimaryDark">#125688</color>-->
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="white_color">#ffffff</color>
+    <!--<color name="colorAccent">#c8e8ff</color>-->
+</resources>
