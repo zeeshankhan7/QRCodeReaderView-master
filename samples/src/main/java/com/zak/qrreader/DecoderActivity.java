@@ -2,13 +2,16 @@ package com.zak.qrreader;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -47,7 +52,8 @@ private  int checkLoginLogout=0;
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_decoder);
-    checkLoginLogout=getIntent().getIntExtra("scan",1);
+    checkLoginLogout=getIntent().getIntExtra(MainActivity.SCAN,0);
+
     mainLayout = (ViewGroup) findViewById(R.id.main_layout);
 
     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -105,18 +111,13 @@ private void sendData(String jsonString) {
   final ProgressDialog pDialog = new ProgressDialog(this);
   pDialog.setMessage("Loading...");
   pDialog.show();
-  String url = "http://demo-ramnath.rhcloud.com/loginVisitors.do";
-  if(checkLoginLogout==1) {
-    url = "http://demo-ramnath.rhcloud.com/loginVisitors.do";
-  }else if(checkLoginLogout==2){
-    url = "http://demo-ramnath.rhcloud.com/logoutVisitors.do";
-  }
+
   AsyncHttpClient client = new AsyncHttpClient();
   StringEntity entity = null;
   try {
     mainObject = new JSONObject(jsonString);
     j.put("patientId", mainObject.getString("id"));
-    j.put("contactNumber", mainObject.getString("mobile"));
+    j.put(getUrl(checkLoginLogout).get(0), mainObject.getString("mobile"));
     entity = new StringEntity(j.toString());
   } catch (JSONException e) {
     e.printStackTrace();
@@ -124,7 +125,7 @@ private void sendData(String jsonString) {
     e.printStackTrace();
   }
   client.setTimeout(3000);
-  client.post(getApplicationContext(), url, entity, "application/json",
+  client.post(getApplicationContext(), getUrl(checkLoginLogout).get(1), entity, "application/json",
           new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -135,11 +136,16 @@ private void sendData(String jsonString) {
 
                 resultTextView.setText(message);
                 resultTextView.setTextSize(28);
+
+
                 if(responseJson.getString("status").equalsIgnoreCase("failure")){
                   resultTextView.setTextColor(Color.RED);
+                  showAlert(message,false);
                 }else {
                   resultTextView.setTextColor(Color.GREEN);
+                  showAlert(message,true);
                 }
+
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
               } catch (JSONException e) {
                 e.printStackTrace();
@@ -157,7 +163,32 @@ private void sendData(String jsonString) {
 
 }
 
-
+private void showAlert(String message, boolean valid ){
+  AlertDialog.Builder builder;
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    if (valid) {
+      builder = new AlertDialog.Builder(this, R.style.AlertDialogCustomValid);
+    }else{
+      builder = new AlertDialog.Builder(this, R.style.AlertDialogCustomInvalid);
+    }
+  } else {
+    builder = new AlertDialog.Builder(this);
+  }
+  builder.setTitle("Scan Status")
+          .setMessage(message)
+          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+              // continue with delete
+            }
+          })
+          .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+              // do nothing
+            }
+          })
+          .setIcon(android.R.drawable.ic_dialog_alert)
+          .show();
+}
 
 
   private void requestCameraPermission() {
@@ -203,4 +234,27 @@ private void sendData(String jsonString) {
     });
     qrCodeReaderView.startCamera();
   }
-}
+
+  private List<String> getUrl(int value) {
+    List<String> list = new ArrayList<>();
+    switch (value) {
+      case 1:
+        list.add("attendentContactNo");
+        list.add("http://demo-ramnath.rhcloud.com/loginAttendent.do");
+        break;
+      case 2:
+        list.add("attendentContactNo");
+        list.add("http://demo-ramnath.rhcloud.com/logoutAttendent.do");
+        break;
+      case 3:
+        list.add("contactNumber");
+        list.add("http://demo-ramnath.rhcloud.com/loginVisitors.do");
+        break;
+      case 4:
+        list.add("contactNumber");
+        list.add("http://demo-ramnath.rhcloud.com/logoutVisitors.do");
+        break;
+
+    }
+    return list;
+  }}
