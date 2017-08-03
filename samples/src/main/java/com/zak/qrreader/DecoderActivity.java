@@ -150,7 +150,7 @@ private void sendData(String jsonString) {
                   showAlert(message,true);
                 }
 
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
               } catch (JSONException e) {
                 e.printStackTrace();
               }
