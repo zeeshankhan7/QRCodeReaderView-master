@@ -48,6 +48,7 @@ public class DecoderActivity extends AppCompatActivity
   private CheckBox enableDecodingCheckBox;
   private PointsOverlayView pointsOverlayView;
 private  int checkLoginLogout=0;
+  private boolean isScanned=false;
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -101,9 +102,12 @@ private  int checkLoginLogout=0;
   // "text" : the text encoded in QR
   // "points" : points where QR control points are placed
   @Override public void onQRCodeRead(String text, PointF[] points) {
-    resultTextView.setText(text);
-    sendData(text);
-    pointsOverlayView.setPoints(points);
+    if(!isScanned) {
+      resultTextView.setText(text);
+      sendData(text);
+      pointsOverlayView.setPoints(points);
+      isScanned=true;
+    }
   }
 private void sendData(String jsonString) {
   JSONObject mainObject = null;
@@ -180,10 +184,13 @@ private void showAlert(String message, boolean valid ){
           .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
               // continue with delete
+              isScanned=false;
+              finish();
             }
           })
           .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+              isScanned=false;
               // do nothing
             }
           })
