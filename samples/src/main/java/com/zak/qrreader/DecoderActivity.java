@@ -158,6 +158,7 @@ private void sendData(String jsonString) {
               resultTextView.setText("Please try again");
               resultTextView.setTextSize(28);
               resultTextView.setTextColor(Color.RED);
+              showAlert("Please try again",false);
             }
           });
 
