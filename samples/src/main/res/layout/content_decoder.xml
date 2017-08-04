@@ -22,7 +22,7 @@
       />
 
   <TextView
-      android:background="#55000000"
+      android:background="#552e9f92"
       android:id="@+id/result_text_view"
       android:layout_width="match_parent"
       android:gravity="center"
@@ -35,7 +35,7 @@
       />
 
   <CheckBox
-      android:background="#99000000"
+      android:background="#992e9f92"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:text="On/Off flashlight"
@@ -48,7 +48,7 @@
       />
 
   <CheckBox
-      android:background="#99000000"
+      android:background="#992e9f92"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:text="On/Off QR decoding"

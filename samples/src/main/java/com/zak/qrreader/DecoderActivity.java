@@ -63,8 +63,8 @@ private  int checkLoginLogout=0;
     } else {
       requestCameraPermission();
     }
-    //String json = "{\"mobile\": \"9873799571\",\"id\": \"2\"}";
-    //sendData(json);
+    /*String json = "{\"mobile\": \"9873799571\",\"id\": \"2\"}";
+    sendData(json);*/
   }
 
   @Override protected void onResume() {
